@@ -9,6 +9,12 @@
 -- | logical or
 -- [A-F] range from A to F
 
+SELECT
+FROM
+WHERE
+JOIN
+ORDER BY
+
 --------------------------------------------------------------------------------
 --use the command "USE 'database_name'" to switch to a different database--
 
@@ -277,46 +283,46 @@ FRO M
 ---------------------------------------------------------------------------------------
 --selects all the customers in the store database with 'phone' that is 'NULL'
 
-SELECT * FROM store.customers
-WHERE
-	phone IS NULL
+    SELECT * FROM store.customers
+    WHERE
+	    phone IS NULL
 
 ---------------------------------------------------------------------------------------
 --selects all the customers in the store database with 'phone' that is 'NOT NULL'
 
-SELECT * FROM store.customers
-WHERE
-	phone IS NOT NULL
+    SELECT * FROM store.customers
+    WHERE
+	    phone IS NOT NULL
 
 ---------------------------------------------------------------------------------------
 --selects all the orders in the store database with 'order_date' that is less than 'shipped_date'(ALREADY SHIPPED)
 
-SELECT * FROM store.orders
-WHERE order_date < shipped_date
+    SELECT * FROM store.orders
+    WHERE order_date < shipped_date
 
 -------------------------------------------
 --selects all the orders in the store database with 'order_date' that is less than 'shipped_date'(HAS NOT YET BEEN SHIPPED)
 
-SELECT * FROM store.orders
-WHERE shipped_date IS NULL
+    SELECT * FROM store.orders
+    WHERE shipped_date IS NULL
 
 ---------------------------------------------------------------------------------------
 --this selects all customers in the store database and orders them by 'first_name' in ASCENDING order
 
-SELECT * FROM store.customers
-ORDER BY first_name
+    SELECT * FROM store.customers
+    ORDER BY first_name
  
 -------------------------------------------
 --this selects all customers in the store database and orders them by 'first_name' in DESCENDING
 
-SELECT * FROM store.customers
-ORDER BY first_name DESC
+    SELECT * FROM store.customers
+    ORDER BY first_name DESC
 
 -------------------------------------------
 --this selects all customers in the store database and orders them in ASCENDING ORDER by prioritizing 'state' and then 'first_name'
 
-SELECT * FROM store.customers
-ORDER BY state, first_name
+    SELECT * FROM store.customers
+    ORDER BY state, first_name
 --output:  firsrt_name      ----------  state
 --        __________________________________ 
 --          Ramoloa         ----------  CA
@@ -329,8 +335,8 @@ ORDER BY state, first_name
 ---------------------------------------------
 --this selects all customers in the store database and orders them in DESCENDING ORDER by prioritizing 'state' and then 'first_name'
 
-SELECT * FROM store.customers
-ORDER BY state DESC, first_name DESC
+    SELECT * FROM store.customers
+    ORDER BY state DESC, first_name DESC
 --output:  firsrt_name        ----------  state
 --        __________________________________ 
 --          Ines              ----------  VA
@@ -343,8 +349,8 @@ ORDER BY state DESC, first_name DESC
 ---------------------------------------------
 --this selects all customers in the store database and orders them in DESCENDING ORDER by prioritizing 'state' and then ORDERS BY 'first_name' in ASCENDING order
 
-SELECT * FROM store.customers
-ORDER BY state DESC, first_name
+    SELECT * FROM store.customers
+    ORDER BY state DESC, first_name
 --output:  firsrt_name        ----------  state
 --        __________________________________ 
 --          Babara            ----------  VA
@@ -357,9 +363,9 @@ ORDER BY state DESC, first_name
 ---------------------------------------------------------------------------------------
 --his selects all from the order_items table and chooses only order_id that is 2 and ORDERS BY 'unit_price * quantity' in ASCENDING order
 
-SELECT * FROM sql_store.order_items
-WHERE order_id = 2
-ORDER BY unit_price * quantity
+    SELECT * FROM sql_store.order_items
+    WHERE order_id = 2
+    ORDER BY unit_price * quantity
 --output: 
 --order_id	product_id	quantity	unit_price
 --  2	        6       	2	        2.94
@@ -367,13 +373,11 @@ ORDER BY unit_price * quantity
 --  2	        1       	2	        9.10
 
 ---------------------------------------------------------------------------------------
+-- ORDER BY -- This selects all from the order_items table and chooses only order_id that is 2 and ORDERS BY 'unit_price * quantity' in ASCENDING order
 
-
---This selects all from the order_items table and chooses only order_id that is 2 and ORDERS BY 'unit_price * quantity' in ASCENDING order
-
-SELECT * FROM sql_store.order_items
-WHERE order_id = 2
-ORDER BY unit_price * quantity
+    SELECT * FROM sql_store.order_items
+    WHERE order_id = 2
+    ORDER BY unit_price * quantity
 --output: 
 --order_id	product_id	quantity	unit_price
 --  2	        6       	2	        2.94
@@ -381,17 +385,290 @@ ORDER BY unit_price * quantity
 --  2	        1       	2	        9.10
 
 ---------------------------------------------------------------------------------------
---This selects all from the order_items table and chooses only order_id that is 2 and ORDERS BY 'unit_price * quantity' in DESCENDING order with the total_price column
+-- ORDER BY -- This selects all from the order_items table and chooses only order_id that is 2 and ORDERS BY 'unit_price * quantity' in DESCENDING order with the total_price column
 
-SELECT *, (quantity * unit_price) AS 'total_price' 
-FROM sql_store.order_items
-WHERE order_id = 2
-ORDER BY (quantity * unit_price) DESC
+    SELECT *, (quantity * unit_price) AS 'total_price' 
+    FROM sql_store.order_items
+    WHERE order_id = 2
+    ORDER BY (quantity * unit_price) DESC
 -- output: order_id  product_id	 quantity	unit_price	total_price
 --           ___________________________________________________________
 --            2	        1	         2	      9.10	        18.20
 --            2	        4	         4	      1.66       	6.64
 --            2      	6	         2	      2.94	        5.88
+
+-----------------------------------------------------------------------------------------
+--LIMIT -- selects the first 3 customers in the store database
+
+    SELECT * FROM store.customers
+    LIMIT 3
+
+-----------------------------------------------------------------------------------------
+-- LIMITS and SKIPS the first 3 customers and selects the next 3 customers in the store database
+
+    SELECT * FROM store.customers
+    LIMIT 3, 3
+
+-----------------------------------------------------------------------------------------
+--LIMTIS the customers to the top 3 customers in points
+
+    SELECT * FROM store.customers
+    ORDER BY points DESC
+    LIMIT 3, 3
+
+-----------------------------------------------------------------------------------------
+-- INNER JOIN --this joins the orders table with the customers table and orders table and selects all the columns and ONLY PRINTS if 'cutomers.cutomer_id = orders.cutomer_id'
+
+    SELECT * FROM store.orders
+    JOIN sql_store.customers
+    	ON sql_store.customers.customer_id = store.orders.customer_id
+--output: same as above
+--note: 'INNER JOIN' = 'JOIN' -------------------  'INNER JOIN' is the default JOIN type
+--note: you only need to prefix(path/ex.sql_store.customer.customer_id[database.table.column])if not the same DATABASE or not using the same DATABASE
+--note: if the error says "Unknown column 'orders.customer_id' in 'on clause'", then you need to use the full path to the table
+--note: if the error says ambiguous, then you need to use the full path to the table
+
+-----------------------------------
+-- INNER JOIN -----this joins the order_items table with the products table from the same database 'store' and selects all the columns and ONLY OUTPUTS if the 'order_id is the same as the product_id'
+    
+    SELECT * FROM store.order_items
+    JOIN store.products 
+    	ON store.order_items.order_id = store.products.product_id
+
+-----------------------------------
+-- INNER JOIN ----- this is the same as the above query but with shorter syntax
+
+    SELECT * FROM store.order_items oi
+    JOIN store.products p 
+	    ON oi.order_id = p.product_id
+
+---------------------------------------------------------------------------------------
+-- INNER JOIN --this joins the order_items table with the products table in the same database 'store' and selects all the columns and ONLY OUTPUTS if the 'product_id is the same as the product_id'
+    USE store;
+    SELECT order_id, oi.product_id, quantity , oi.unit_price
+    FROM order_items oi
+    JOIN products p 
+        ON oi.product_id = p.product_id
+
+---------------------------------------------------------------------------------------
+--JOINING ACCROSS DATABASES -- this joins the order_items table(sql_store database) and products table(sql_inventory database) while selecting all the columns
+
+    USE sql_store;
+    SELECT * FROM order_items oi 
+    JOIN sql_inventory.products 
+--output: 180 rows
+
+---------------------------------------------------------------------------------------
+-- JOINIG ACCROSS DATABASES -- this joins the order_items table(sql_store database) and products table(sql_inventory database) while selecting all the columns and ONLY OUTPUTS if the 'product_id is the same as the product_id'
+
+    USE sql_store;
+    SELECT * FROM order_items oi 
+    JOIN sql_inventory.products p
+	    ON oi.product_id = p.product_id
+--output: 18 rows
+
+-------------------------------------------
+-- SELF JOIN -- If each employee has a manager who is also listed as an employee in the same table, you can use a self join to find out who manages whom and also who reports to whom
+
+    USE sql_hr;
+    SELECT * FROM employees e
+    JOIN employees m
+	    ON e.reports_to = m.employee_id	
+--output: this will output all the employees in the hr database and their managers
+-- note: when using self joins, you need to use the alias and prefix
+
+-------------------------------------------
+-- SELF JOIN -- same as above but with shorter syntax only outputting the employee_id and first_name of both employee and their respective manager
+
+    USE sql_hr;
+    SELECT 
+	    e.employee_id,
+        e.first_name,
+        m.first_name AS Manager
+    FROM employees e
+    JOIN employees m
+    	ON e.reports_to = m.employee_id
+--outout: employee_id	first_name	manager
+--___________________________________________________________
+--            33391	      D'arcy	Yovonnda
+--            37851	      Sayer     Yovonnda
+--            40448	      Mindy	    Yovonnda
+
+---------------------------------------------------------------------------------------
+-- JOINING MULTIPLE TABLES --this selects all the columns from the "orders table, customers table and order_statuses table" -- JOINING MULTIPLE TABLES --
+
+SELECT 
+	*
+FROM sql_store.orders o
+JOIN sql_store.customers c
+	ON c.customer_id = o.customer_id
+JOIN sql_store.order_statuses os
+	ON os.order_status_id = o.status
+
+--------------------------------------
+-- JOINING MULTIPLE TABLES -- same output as above, but with shorter syntax
+ 
+	order_id, 
+    o.order_date, 
+    c.customer_id, 
+    c.first_name, 
+    os.name AS 'order status', 
+    o.shipped_date,
+    o.shipper_id
+FROM sql_store.orders o
+JOIN sql_store.customers c
+	ON c.customer_id = o.customer_id
+JOIN sql_store.order_statuses os
+	ON os.order_status_id = o.status
+
+------------------------------------------------------------------------------------------
+-- COMPOUND JOIN CONDITIONS -- A compound join condition is when you specify more than one condition in the ON clause to determine how rows from two tables should be joined.
+-- The query is combining rows from the order_items and order_item_notes tables where the order ID and product ID match in both tables.
+--This helps you see details about an ordered item alongside any notes or special instructions related to that item.
+
+SELECT * FROM sql_store.order_items oi
+JOIN sql_store.order_item_notes oin
+	ON oi.order_id = oin.order_id
+    AND oi.product_id = oin.product_id
+
+------------------------------------------------------------------------------------------
+-- IMPLIICINT JOIN SYNTAX
+
+-- this is the ORIGINAL SYNTAX --   
+SELECT * 
+FROM sql_store.orders o
+JOIN sql_store.customers c
+	ON o.customer_id = c.customer_id
+
+-- this is the IMPLICINT JOIN SYNTAX --
+ SELECT * 
+FROM 
+	sql_store.orders o,
+	sql_store.customers c
+WHERE
+	o.customer_id = c.customer_id
+--note: dont use this
+
+---------------------------------------------------------------------------------------
+-- OUTER JOIN -- [LEFT JOIN | RIFHT JOIN] = [LEFT OUTER JOIN | RIGHT OUTER JOIN]
+--INNER JOIN: Only rows where the join condition is met in both tables.
+--LEFT JOIN: All rows from the left table, with matched rows from the right table and NULL for unmatched rows in the right table.
+--RIGHT JOIN: All rows from the right table, with matched rows from the left table and NULL for unmatched rows in the left table.
+--note: basically theyre just like INNER JOINS but outputs the selected part even if the condition is not met, they just differ in how to handle unmatch rows
+
+--WIHTOUT LEFT JOIN --WIHTOUT LEFT JOIN --WIHTOUT LEFT JOIN --WIHTOUT LEFT JOIN --WIHTOUT LEFT JOIN --WIHTOUT LEFT JOIN --WIHTOUT LEFT JOIN --WIHTOUT LEFT JOIN --WIHTOUT LEFT JOIN 
+
+SELECT 
+	c.customer_id,
+    c.first_name,
+    o.order_id
+FROM 
+	sql_store.customers c
+LEFT JOIN sql_store.orders o
+	ON o.customer_id = c.customer_id
+ORDER BY c.customer_id
+-- output:
+-- customer_id first_name order_id
+--    2	          Ines     	4
+--    2           Ines   	7
+--    5	          Clemmie	5
+--    5	          Clemmie	8
+--    6	          Elka	    1
+--    6           Elka   	10
+--    7	          Ilene    	2
+--   8	          Thacher	3
+--   10	          Levy	    6
+--   10  	      Levy    	9
+
+--WITH LEFT JOIN --WITH LEFT JOIN --WITH LEFT JOIN --WITH LEFT JOIN --WITH LEFT JOIN --WITH LEFT JOIN --WITH LEFT JOIN --WITH LEFT JOIN --WITH LEFT JOIN --WITH LEFT JOIN --WITH LEFT JOIN --WITH LEFT JOIN 
+
+SELECT 
+	c.customer_id,
+    c.first_name,
+    o.order_id
+FROM 
+	sql_store.customers c
+LEFT JOIN sql_store.orders o
+	ON o.customer_id = c.customer_id
+ORDER BY c.customer_id
+-- output:
+--  customer_id    first_name     order_id
+--     1	          Babara	
+--     2	          Ines       	4
+--     2	          Ines       	7
+--     3	          Freddi	
+--     4	          Ambur	
+--     5	          Clemmie      	5
+--     5              Clemmie    	8
+--     6           	  Elka       	1
+--     6   	          Elka      	10
+--     7           	  Ilene      	2
+--     8         	  Thacher    	3
+--     9              Romola	
+--     10	          Levy       	6
+--     10             Levy       	9
+-- this prints everything wether 'o.customer_id = c.customer_id' is true or not
+
+--WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN
+
+SELECT 
+	c.customer_id,
+    c.first_name,
+    o.order_id
+FROM 
+	sql_store.customers c
+RIGHT JOIN sql_store.orders o
+	ON o.customer_id = c.customer_id
+ORDER BY c.customer_id
+-- output:
+-- customer_id first_name order_id
+--    2	          Ines     	4
+--    2           Ines   	7
+--    5	          Clemmie	5
+--    5	          Clemmie	8
+--    6	          Elka	    1
+--    6           Elka   	10
+--    7	          Ilene    	2
+--   8	          Thacher	3
+--   10	          Levy	    6
+--   10  	      Levy    	9
+--note: the same output as above 'WITHTOUT LEFT JOIN' but with the 'RIGHT JOIN' keyword UNLESS YOU SWAP THE FROM=sql_store.customers AND JOIN=sql_store.orders THEN the output will be different
+
+---------------------------------------------------------------------------------------
+--OUTER JOINS BETWEEN MULTIPLE TABLES WITH ORDER BY--
+
+SELECT 
+	c.customer_id,
+    c.first_name,
+    o.order_id
+FROM 
+	sql_store.customers c
+LEFT JOIN sql_store.orders o
+	ON o.customer_id = c.customer_id
+LEFT JOIN sql_store.shippers sid
+	ON sid.shipper_id = o.shipper_id  
+ORDER BY c.customer_id
+--output:
+1	Babara	
+2	Ines	4
+2	Ines	7
+3	Freddi	
+4	Ambur	
+5	Clemmie	5
+5	Clemmie	8
+6	Elka	1
+6	Elka	10
+7	Ilene	2
+8	Thacher	3
+9	Romola	
+10	Levy	6
+10	Levy	9	
+
+
+
+
+
+
 
 
 
