@@ -4,6 +4,7 @@
 --use the command "SHOW TABLES" to list all the tables in the current database--
 --use the command "DESCRIBE table_name" to view the structure of a table--
 --use the command "SELECT * FROM table_name" to view the contents of a table--
+--p.s. -if fyou cant update because you are in 'SAFE MODE', go to preferences, and in the SQL EDITOR uncheck 'Safe Mode' restart MySQL Workbench--
 -- ^ beginning
 -- $ end
 -- | logical or
@@ -451,6 +452,7 @@ FRO M
         ON oi.product_id = p.product_id
 
 ---------------------------------------------------------------------------------------
+-- JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS JOIN CROSS    
 --JOINING ACCROSS DATABASES -- this joins the order_items table(sql_store database) and products table(sql_inventory database) while selecting all the columns
 
     USE sql_store;
@@ -506,47 +508,50 @@ JOIN sql_store.order_statuses os
 	ON os.order_status_id = o.status
 
 --------------------------------------
--- JOINING MULTIPLE TABLES -- same output as above, but with shorter syntax
+-- JOINING MULTIPLE TABLES -- same output as above, but with selected columns
  
-	order_id, 
-    o.order_date, 
-    c.customer_id, 
-    c.first_name, 
-    os.name AS 'order status', 
-    o.shipped_date,
-    o.shipper_id
-FROM sql_store.orders o
-JOIN sql_store.customers c
-	ON c.customer_id = o.customer_id
-JOIN sql_store.order_statuses os
-	ON os.order_status_id = o.status
+    SELECT
+	    order_id, 
+        o.order_date, 
+        c.customer_id, 
+        c.first_name, 
+        os.name AS 'order status', 
+        o.shipped_date,
+        o.shipper_id
+    FROM sql_store.orders o
+    JOIN sql_store.customers c
+	    ON c.customer_id = o.customer_id
+    JOIN sql_store.order_statuses os
+	    ON os.order_status_id = o.status
 
 ------------------------------------------------------------------------------------------
 -- COMPOUND JOIN CONDITIONS -- A compound join condition is when you specify more than one condition in the ON clause to determine how rows from two tables should be joined.
 -- The query is combining rows from the order_items and order_item_notes tables where the order ID and product ID match in both tables.
 --This helps you see details about an ordered item alongside any notes or special instructions related to that item.
 
-SELECT * FROM sql_store.order_items oi
-JOIN sql_store.order_item_notes oin
-	ON oi.order_id = oin.order_id
-    AND oi.product_id = oin.product_id
+    SELECT * FROM sql_store.order_items oi
+    JOIN sql_store.order_item_notes oin
+	    ON oi.order_id = oin.order_id
+        AND oi.product_id = oin.product_id
 
 ------------------------------------------------------------------------------------------
 -- IMPLIICINT JOIN SYNTAX
 
 -- this is the ORIGINAL SYNTAX --   
-SELECT * 
-FROM sql_store.orders o
-JOIN sql_store.customers c
-	ON o.customer_id = c.customer_id
+
+    SELECT * 
+    FROM sql_store.orders o
+    JOIN sql_store.customers c
+	    ON o.customer_id = c.customer_id
 
 -- this is the IMPLICINT JOIN SYNTAX --
- SELECT * 
-FROM 
-	sql_store.orders o,
-	sql_store.customers c
-WHERE
-	o.customer_id = c.customer_id
+
+    SELECT * 
+    FROM 
+	    sql_store.orders o,
+	    sql_store.customers c
+    WHERE
+	    o.customer_id = c.customer_id
 --note: dont use this
 
 ---------------------------------------------------------------------------------------
@@ -558,15 +563,15 @@ WHERE
 
 --WIHTOUT LEFT JOIN --WIHTOUT LEFT JOIN --WIHTOUT LEFT JOIN --WIHTOUT LEFT JOIN --WIHTOUT LEFT JOIN --WIHTOUT LEFT JOIN --WIHTOUT LEFT JOIN --WIHTOUT LEFT JOIN --WIHTOUT LEFT JOIN 
 
-SELECT 
-	c.customer_id,
-    c.first_name,
-    o.order_id
-FROM 
-	sql_store.customers c
-LEFT JOIN sql_store.orders o
-	ON o.customer_id = c.customer_id
-ORDER BY c.customer_id
+    SELECT
+	    c.customer_id,
+        c.first_name,
+        o.order_id
+    FROM 
+	    sql_store.customers c
+    LEFT JOIN sql_store.orders o
+	    ON o.customer_id = c.customer_id
+    ORDER BY c.customer_id
 -- output:
 -- customer_id first_name order_id
 --    2	          Ines     	4
@@ -582,15 +587,15 @@ ORDER BY c.customer_id
 
 --WITH LEFT JOIN --WITH LEFT JOIN --WITH LEFT JOIN --WITH LEFT JOIN --WITH LEFT JOIN --WITH LEFT JOIN --WITH LEFT JOIN --WITH LEFT JOIN --WITH LEFT JOIN --WITH LEFT JOIN --WITH LEFT JOIN --WITH LEFT JOIN 
 
-SELECT 
-	c.customer_id,
-    c.first_name,
-    o.order_id
-FROM 
-	sql_store.customers c
-LEFT JOIN sql_store.orders o
-	ON o.customer_id = c.customer_id
-ORDER BY c.customer_id
+    SELECT 
+	    c.customer_id,
+        c.first_name,
+        o.order_id
+    FROM 
+	    sql_store.customers c
+    LEFT JOIN sql_store.orders o
+	    ON o.customer_id = c.customer_id
+    ORDER BY c.customer_id
 -- output:
 --  customer_id    first_name     order_id
 --     1	          Babara	
@@ -609,17 +614,17 @@ ORDER BY c.customer_id
 --     10             Levy       	9
 -- this prints everything wether 'o.customer_id = c.customer_id' is true or not
 
---WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN
+-- WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN --WITH RIGHT JOIN
 
-SELECT 
-	c.customer_id,
-    c.first_name,
-    o.order_id
-FROM 
-	sql_store.customers c
-RIGHT JOIN sql_store.orders o
-	ON o.customer_id = c.customer_id
-ORDER BY c.customer_id
+    SELECT 
+	    c.customer_id,
+        c.first_name,
+        o.order_id
+    FROM 
+	    sql_store.customers c
+    RIGHT JOIN sql_store.orders o
+	    ON o.customer_id = c.customer_id
+    ORDER BY c.customer_id
 -- output:
 -- customer_id first_name order_id
 --    2	          Ines     	4
@@ -634,52 +639,299 @@ ORDER BY c.customer_id
 --   10  	      Levy    	9
 --note: the same output as above 'WITHTOUT LEFT JOIN' but with the 'RIGHT JOIN' keyword UNLESS YOU SWAP THE FROM=sql_store.customers AND JOIN=sql_store.orders THEN the output will be different
 
----------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
 --OUTER JOINS BETWEEN MULTIPLE TABLES WITH ORDER BY--
 
-SELECT 
-	c.customer_id,
-    c.first_name,
-    o.order_id
-FROM 
-	sql_store.customers c
-LEFT JOIN sql_store.orders o
-	ON o.customer_id = c.customer_id
-LEFT JOIN sql_store.shippers sid
-	ON sid.shipper_id = o.shipper_id  
-ORDER BY c.customer_id
+    SELECT 
+	    c.customer_id,
+        c.first_name,
+        o.order_id
+    FROM 
+	    sql_store.customers c
+    LEFT JOIN sql_store.orders o
+	    ON o.customer_id = c.customer_id
+    LEFT JOIN sql_store.shippers sid
+	    ON sid.shipper_id = o.shipper_id  
+    ORDER BY c.customer_id
 --output:
-1	Babara	
-2	Ines	4
-2	Ines	7
-3	Freddi	
-4	Ambur	
-5	Clemmie	5
-5	Clemmie	8
-6	Elka	1
-6	Elka	10
-7	Ilene	2
-8	Thacher	3
-9	Romola	
-10	Levy	6
-10	Levy	9	
+--          
+--              1	        Babara	
+--              2	        Ines	    4
+--              2	        Ines	    7
+--              3	        Freddi	
+--              4	        Ambur	
+--              5	        Clemmie	    5
+--              5	        Clemmie	    8
+--              6	        Elka	    1
+--              6	        Elka	    10
+--              7	        Ilene	    2
+--              8	        Thacher	    3
+--              9	        Romola	
+--              10	        Levy	    6
+--              10	        Levy	    9	
 
+----------------------------------------------------------------------------------------
+-- UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION
+-- this unifies 2 selects into one query
 
+    SELECT
+	    o.order_date,
+        o.order_id,
+        'ACTIVE' AS status
+    FROM store.orders o
+    WHERE o.order_date >= '2019-01-01'
+    UNION
+    SELECT
+	    o.order_date,
+        o.order_id,
+        'ARCHIVED' AS status
+    FROM store.orders o
+    WHERE o.order_date < '2018-12-31'
+-- output: 
+--order_date	order_id	status
+--2019-01-30	  1			ACTIVE
+--2018-08-02	  2			ARCHIVED
+--2017-12-01	  3			ARCHIVED
+--2017-01-22	  4			ARCHIVED
+--2017-08-25	  5			ARCHIVED
+--2018-11-18	  6			ARCHIVED
+--2018-09-22	  7			ARCHIVED
+--2018-06-08	  8			ARCHIVED
+--2017-07-05	  9			ARCHIVED
+--2018-04-22	  10		ARCHIVED
 
+----------------------------------------------------------------------------------------
+-- UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION UNION
 
+    SELECT 
+	    c.customer_id,
+        c.first_name,
+        c.points,
+        'bronze' AS type
+    FROM store.customers c
+    WHERE 
+	    c.points <= '2000'
+    UNION
+    SELECT 
+	    c.customer_id,
+        c.first_name,
+        c.points,
+        'silveer' AS type
+    FROM store.customers c
+    WHERE 
+	    c.points BETWEEN '2001' AND '3000' 
+    UNION
+    SELECT 
+	    c.customer_id,
+        c.first_name,
+        c.points,
+        'gold' AS type
+    FROM store.customers c
+    WHERE 
+	    c.points <= '3001'
+-- output: customer_id first_name   points      type
+--            2	         Ines	    947	        bronze
+--            4	         Ambur	    457	        bronze
+--            1          Babara	    2273	    silveer
+--            3	         Freddi	    2967	    silveer
+--            1          Babara	    2273	    gold
+--            2          Ines	    947	        gold
 
+----------------------------------------------------------------------------------------
+-- INSERT ROW INSERT ROW INSERT ROW INSERT ROW INSERT ROW INSERT ROW INSERT ROW INSERT ROW INSERT ROW INSERT ROW INSERT ROW INSERT ROW INSERT ROW INSERT ROW INSERT ROW INSERT ROW INSERT ROW INSERT ROW INSERT ROW INSERT ROW
+--inserting a row with default values/null values
 
+    INSERT into store.customers (
+        customer_id,
+	    first_name,
+        last_name,
+        birth_date,
+        phone,
+        address,
+        city,
+        state,
+        points)
+    VALUES (
+        DEFAULT,
+	    'val',
+        'jayson',
+        '2002-03-06',
+        NULL,
+        'cueto streeet',
+        'gingoog',
+        'PH',
+        DEFAULT)
+--output: 1 row(s) affected
+--10	Levy	Mynett	1969-10-13	404-246-3370	68 Lawn Avenue	    Amazon       GA  	796
+--11	val	    jayson	2002-03-06		            23 cueto streeet	Gingoog	     PH	     0
+--original:
+--10	Levy	Mynett	1969-10-13	404-246-3370	68 Lawn Avenue	    Amazon       GA	     796
 
+------------------------------------------
+--same as above but with shorter syntax
 
+    INSERT into store.customers (
+	    first_name,
+        last_name,
+        birth_date,
+        address,
+        city,
+        state)
+    VALUES (
+	    'val',
+        'jayson',
+        '2002-03-06',
+        'cueto streeet',
+        'gingoog',
+        'PH')
+--ouput: same as above but with shorter syntax
 
+---------------------------------------
+-- INSERTING MULTIPLE ROWS -- INSERTING MULTIPLE ROWS -- INSERTING MULTIPLE ROWS -- INSERTING MULTIPLE ROWS -- INSERTING MULTIPLE ROWS -- INSERTING MULTIPLE ROWS -- INSERTING MULTIPLE ROWS -- INSERTING MULTIPLE ROWS --
 
+    INSERT INTO sql_store.products (
+	    name,
+        quantity_in_stock,
+        unit_price)
+    VALUE
+	    ('product 1','13','1.65'),
+	    ('product 2','11','1.65'),
+        ('product 3','14','1.65')
 
+----------------------------------------------------------------------------------------
+-- CREATING A COPY OF TABLE
+--this creates a copy of the orders table and names it orders_archived
 
+    CREATE TABLE sql_store.orders_archived AS 
+    SELECT * FROM sql_store.orders
 
+----------------------------------------------------------------------------------------
+-- TRUNCATE -- TRUNCATE -- TRUNCATE -- TRUNCATE -- TRUNCATE -- TRUNCATE -- TRUNCATE -- TRUNCATE -- TRUNCATE -- TRUNCATE -- TRUNCATE -- TRUNCATE -- TRUNCATE -- TRUNCATE -- TRUNCATE -- TRUNCATE -- TRUNCATE -- TRUNCATE -- TRUNCATE -- TRUNCATE -- TRUNCATE -- TRUNCATE -- TRUNCATE 
+-- DELETE ALL ROWS FROM TABLE
+--this deletes all rows(RECORDS) from the orders_archived table
+
+    TRUNCATE TABLE sql_store.orders_archived;
+
+----------------------------------------------------------------------------------------
+-- DELETE TABLE
+
+    DELETE FROM name_of_table
+
+--------------------------------------------
+-- this is the same as above but with conditions
+    DELETE FROM name_of_table
+    WHERE column_name = 1
+
+----------------------------------------------------------------------------------------
+-- CREATE A CPPY OF TABLE but with selected columns
+
+    CREATE TABLE sql_store.new_orders AS 
+    SELECT
+	    o.order_id,
+        o.customer_id
+    FROM sql_store.orders o
+
+----------------------------------------------------------------------------------------
+-- INSERT INTO TABLE WTIH CONDITION 
+--this inserts the column order_id, customer_id and status from the orders table into the new_orderssss table where the status is equal to 1
+
+    INSERT sql_store.new_orderssss
+    SELECT
+	    o.order_id,
+        o.customer_id,
+        o.status
+    FROM sql_store.orders o
+    WHERE o.status = '1'
+
+----------------------------------------------------------------------------------------
+-- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE -- DROP TABLE --
+-- this drops the new_orderssss table/ deletes the table            
+    DROP sql_store.new_orderssss;
+
+----------------------------------------------------------------------------------------
+-- CREAT A COPY OF A TABLE WITH SELECTED COLUMNS AND JOINED TABLES
+--this creates a copy of the invoices table and names it invoices_archived with the columns invoice_id, client_id, cleint and payment_date and joins the clients table using the client_id column to get the name of the client where the payment_date is not null
+
+    CREATE TABLE sql_invoicing.invoices_archived AS
+    SELECT
+	    i.invoice_id,
+    	i.client_id,
+        c.name AS cleint,
+        i.payment_date
+    FROM sql_invoicing.invoices i
+    JOIN sql_invoicing.clients c
+    	USING (client_id)
+    WHERE i.payment_date IS NOT NULL
+
+----------------------------------------------------------------------------------------
+-- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE -- UPDATE --
+-- this updates the customers table with the points column and sets the points to the points + 10 * 100 where the customer_id is equal to 1
+
+    UPDATE sql_invoicing.invoices i
+    SET 
+        payment_total = 10,
+    	payment_date ='2019-01-01'
+        invoice_total = 10
+    WHERE i.invoice_id = 1
+
+----------------------------------------
+-- this is the same as above but but with some other sample commands
+
+    UPDATE sql_invoicing.invoices i
+    SET 
+        payment_total = invoice_total * 100,
+	    payment_date = due_date
+    WHERE i.invoice_id = 1
+
+---------------------------------------------------
+-- UPDATING MULTIPLE ROWS
+-- this is the same as above but the update affects multiple rows with client_id IN (4, 5)
+
+    UPDATE sql_invoicing.invoices i
+    SET payment_total = 110,
+	    payment_date ='2019-01-01'
+    WHERE i.client_id IN (4, 5)
+
+---------------------------------------------------
+-- UPDATING by ADDING points to the points column
+
+    UPDATE sql_store.customers
+    SET points = points + 50
+    WHERE birth_date < '1990-01-01'
+--p.s. -if fyou cant update because you are in 'SAFE MODE', go to preferences, and in the SQL EDITOR uncheck 'Safe Mode' and restart MySQL Workbench--
+
+---------------------------------------------------
+-- USING SUBQUERIES IN UPDATES -- WHILE CONNECTING TO OTHER TABLES
+-- This updates the payment_total and payment_date columns in the invoices table where the client_id is in the clients table and the state is either CA or NY
+-- gina update nya ang paymentotal ug payment_date sa mga client na naka puyo sa STATE na CA at NY sa clients table
+
+    UPDATE sql_invoicing.invoices i
+    SET 
+    	i.payment_total = i.invoice_total * 0.5,
+        i.payment_date = i.due_date
+    WHERE i.client_id IN
+    (SELECT c.client_id 
+    FROM sql_invoicing.clients c
+    WHERE c.state IN ('CA', 'NY'))
+
+----------------------------------------------------------------------------------------
+-- USING SUBQUERIES IN UPDATES -- WHILE CONNECTING TO OTHER TABLES 
+-- this updates the comments to gold standard from the orders table based on the points from the customers table
+
+    UPDATE 
+	    sql_store.orders o
+    SET  
+	    o.comments = 'gold standard'
+    WHERE o.customer_id IN (
+    SELECT c.customer_id
+    FROM  sql_store.customers c
+    WHERE c.points > 3000 )
+
+----------------------------------------------------------------------------------------
 EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE 
 EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE EXCERCISE 
 
-1.  get the customers whose firstname are ELKA or AMBUR
+    get the customers whose firstname are ELKA or AMBUR
     get the customers whose lastname ends with EY or ON
     get the customers whose lastname starts with MY or SE
     get the customers whose lastname contains B followed by R or U
@@ -699,5 +951,3 @@ SELECT * FROM store.customers
 WHERE
 	first_name REGEXP 'ELKA|AMBUR' OR
     last_name REGEXP 'ey|on|se|my|b[ru]'
-
-
