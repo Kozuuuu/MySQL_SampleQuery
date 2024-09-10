@@ -40,6 +40,9 @@ SELECT
 FROM store.customers
 
 --------------------------------------------------------------------------------
+--RENAME A COLUMN
+    ALTER TABLE expenses_savings RENAME COLUMN toatl_savings TO total_savings;
+--------------------------------------------------------------------------------
 --update the state column in the customers table to 'VA '--
 
 
